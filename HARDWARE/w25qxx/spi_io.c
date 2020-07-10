@@ -15,8 +15,8 @@ void SPI_Init(void)
     __HAL_RCC_GPIOB_CLK_ENABLE();
 	__HAL_RCC_GPIOD_CLK_ENABLE();
     
-    //PB3:SCK、PB6:/CS
-    GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_6;
+    //PB3:SCK、PB6:/CS, PB5:/HOLD;
+    GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_6|GPIO_PIN_5;
     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
@@ -35,7 +35,8 @@ void SPI_Init(void)
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
     HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
-    
+
+	SPI_HOLD(1); 	//hold引脚默认功能为hold功能，高电平不使能；误使能的话flash会无效；   
     SPI_CS(1);
     SPI_MOSI(0);
   

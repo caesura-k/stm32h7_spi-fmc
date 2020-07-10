@@ -9,9 +9,11 @@ void w25qxx_readData(u8 *buff,u32 len,u32 address);
 void w25qxx_writeEnable(void);
 void w25qxx_waitBusy(void);
 void spi_test(void);
+void n25q64_test(void);
 
 
-#define USE_SPI_IO	0x00  //为0：不使用模拟io口功能；非0：使用模拟IO口功能；
+
+#define USE_SPI_IO	0x00  //0:spi1外设；1:使用模拟IO口功能；
 extern SPI_HandleTypeDef *hspi1;
 
 
@@ -36,7 +38,7 @@ extern u16 W25QXX_TYPE;
 #define W25X_FastReadDual		0x3B 
 #define W25X_PageProgram		0x02 
 #define W25X_BlockErase			0xD8 
-#define W25X_SectorErase		0x20 
+#define W25X_SectorErase		0x20 //subsectorErase 0-2047;
 #define W25X_ChipErase			0xC7 
 #define W25X_PowerDown			0xB9 
 #define W25X_ReleasePowerDown	0xAB 

@@ -40,7 +40,7 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef * hspi1)
 	__HAL_RCC_GPIOD_CLK_ENABLE();
 	__HAL_RCC_SPI1_CLK_ENABLE();
 
-	GPIO_InitStruct.Pin = GPIO_PIN_6;//CS
+	GPIO_InitStruct.Pin = GPIO_PIN_6|GPIO_PIN_5;//CS,HOLD
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_PULLUP; 
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
@@ -55,6 +55,8 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef * hspi1)
 
 	GPIO_InitStruct.Pin = GPIO_PIN_7;//MOSI
 	HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+
+	HAL_GPIO_WritePin(GPIOB,GPIO_PIN_5,GPIO_PIN_SET);//HOLD pin
 
 	printf("spi1 gpio init done...\r\n");
 }

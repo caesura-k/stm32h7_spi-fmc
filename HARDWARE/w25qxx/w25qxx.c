@@ -18,9 +18,9 @@ u16 w25qxx_readID(void)
 	SPI_WRITE_READ_BYTE(dummy);
 	SPI_WRITE_READ_BYTE(dummy);
 	SPI_WRITE_READ_BYTE(0x00);
-	id=SPI_WRITE_READ_BYTE(dummy);//EFh,表示winbone生产
+	id=SPI_WRITE_READ_BYTE(dummy);	//EFh,表示winbone生产
 	id=id<<8;
-	id|=SPI_WRITE_READ_BYTE(dummy);//17h,表示w25q128系列
+	id|=SPI_WRITE_READ_BYTE(dummy);	//17h,表示w25q128系列
 	SPI_CS(1);
 	printf("w25qxx id:%4x  \r\n",id);
 	return id;
@@ -115,7 +115,6 @@ void w25qxx_writePage(u8 *buff,u8 len,u32 address)
 	u16 sendlen =4;
 	u32 timeout =5000;
 	u8 dummybuff[256];
-
 	
 	u8 *psend = sendbuff;
 	 *psend = W25X_PageProgram;
@@ -200,9 +199,12 @@ void w25qxx_waitBusy(void)
 {	
 	u8 sreg1 =0;
 	SPI_CS(0);
-	SPI_WRITE_READ_BYTE(W25X_ReadStatusReg1);
+	printf("spi_io wait busing... ");
+	
 	do{
-		sreg1=SPI_WRITE_READ_BYTE(dummy);	
+		SPI_WRITE_READ_BYTE(W25X_ReadStatusReg1);
+		sreg1=SPI_WRITE_READ_BYTE(dummy);
+		printf("status register:%2x",sreg1);
 	}while(sreg1&0x01);
 	SPI_CS(1);
 	printf("wait busy done...\r\n");
@@ -216,8 +218,8 @@ void w25qxx_waitBusy(void)
 	u16 len =1;
 	u32 timeout =5000;
 	SPI_CS(0);
-	HAL_SPI_TransmitReceive(hspi1,sendbuff,revbuff,len,timeout);
 	do{
+		HAL_SPI_TransmitReceive(hspi1,sendbuff,revbuff,len,timeout);
 		HAL_SPI_TransmitReceive(hspi1,dummybuff,revbuff,len,timeout);
 	}while(revbuff[0]&0x01);
 	SPI_CS(1);
@@ -225,11 +227,13 @@ void w25qxx_waitBusy(void)
 }
 #endif
 
+
 void spi_test(void)
 {
 	u8 sendbuff[16];
 	u8 revbuff[16];
 	int i;
+	
 	w25qxx_readID();
 	
 	memset(revbuff,0,sizeof(revbuff));
@@ -244,4 +248,5 @@ void spi_test(void)
 	for(i=0;i<16;i++)
 		printf("revbuff[%2d]:%2x \r\n",i,revbuff[i]);
 }
+
 

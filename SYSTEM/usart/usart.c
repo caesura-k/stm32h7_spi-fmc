@@ -71,7 +71,7 @@ void uart_init(u32 bound)
 	HAL_UART_Init(&UART1_Handler);					    //HAL_UART_Init()会使能UART1
 	
 	HAL_UART_Receive_IT(&UART1_Handler, (u8 *)aRxBuffer, RXBUFFERSIZE);//该函数会开启接收中断：标志位UART_IT_RXNE，并且设置接收缓冲以及接收缓冲接收最大数据量
-  
+	printf("uart init done...\r\n");
 }
 
 //UART底层初始化，时钟使能，引脚配置，中断配置
